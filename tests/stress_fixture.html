@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Camoufox Stress & Parity Fixture</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .box { padding: 10px; margin: 10px 0; border: 1px solid #ccc; }
+        .hidden { display: none; }
+        #rich-editor { border: 2px dashed #4CAF50; min-height: 60px; padding: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Camoufox Automation Stress Test</h1>
+
+    <!-- 1. Rich Form Section -->
+    <div class="box" id="form-section">
+        <h2>Rich Controls</h2>
+        <div id="rich-editor" contenteditable="true">Initial contenteditable text</div>
+        <br>
+        <textarea id="multi-area" rows="3" cols="30">Default textarea</textarea>
+        <br>
+        <label><input type="checkbox" id="test-check"> Subscribe to updates</label>
+        <br>
+        <input type="number" id="test-num" value="42">
+        <select id="stress-select">
+            <!-- 50 options populated by script below -->
+        </select>
+        <button id="form-submit-btn" onclick="document.getElementById('form-status').innerText = 'Processed!';">Submit Rich Form</button>
+        <span id="form-status">Pending</span>
+    </div>
+
+    <!-- 2. Dynamic Mutation Section -->
+    <div class="box" id="dynamic-section">
+        <h2>Dynamic Mutation</h2>
+        <button id="shift-btn" onclick="window.injectElements()">Inject Shifting Nodes</button>
+        <div id="injection-target"></div>
+        <button class="unidentified-action-btn" onclick="document.getElementById('action-status').innerText = 'Action Succeeded!';">Target Node To Click</button>
+        <span id="action-status">Waiting</span>
+    </div>
+
+    <!-- 3. Shadow DOM Host -->
+    <div class="box" id="shadow-container">
+        <h2>Shadow DOM Host</h2>
+        <div id="shadow-host"></div>
+    </div>
+
+    <!-- 4. Iframe Container -->
+    <div class="box" id="iframe-container">
+        <h2>Iframe Section</h2>
+        <iframe id="inner-frame" srcdoc="
+            <html><body>
+                <p>Inner Iframe Document</p>
+                <input id='iframe-input' placeholder='Inside iframe'>
+                <button id='iframe-btn' onclick='document.getElementById(&quot;iframe-status&quot;).innerText = &quot;Iframe Clicked!&quot;;'>Click inside frame</button>
+                <span id='iframe-status'>Ready</span>
+            </body></html>
+        "></iframe>
+    </div>
+
+    <!-- 5. Large DOM Generation Target -->
+    <div class="box" id="large-dom-container">
+        <h2>Bulk DOM Nodes</h2>
+        <button id="generate-bulk-btn" onclick="window.generateBulkNodes(500)">Generate 500 Items</button>
+        <div id="bulk-list"></div>
+    </div>
+
+    <!-- 6. Dialog Flood Section -->
+    <div class="box" id="dialog-section">
+        <h2>Dialogs</h2>
+        <button id="trigger-dialogs-btn" onclick="window.triggerChainedDialogs()">Trigger Dialogs</button>
+    </div>
+
+    <script>
+        // Populate select options
+        const sel = document.getElementById('stress-select');
+        for (let i = 1; i <= 50; i++) {
+            const opt = document.createElement('option');
+            opt.value = 'opt_' + i;
+            opt.textContent = 'Option ' + i;
+            if (i === 1) opt.selected = true;
+            sel.appendChild(opt);
+        }
+
+        // Attach open shadow root
+        const host = document.getElementById('shadow-host');
+        if (host && host.attachShadow && !host.shadowRoot) {
+            const shadowRoot = host.attachShadow({ mode: 'open' });
+            shadowRoot.innerHTML = `
+                <p>Inside Open Shadow Root</p>
+                <input id='shadow-input' type='text' placeholder='Inside Shadow DOM'>
+                <button id='shadow-btn' onclick='this.innerText = "Shadow Clicked!";'>Click Shadow</button>
+            `;
+        }
+
+        // Dynamic element injection
+        window.injectElements = function() {
+            const target = document.getElementById('injection-target');
+            const oldAction = document.querySelector('.unidentified-action-btn');
+            const replacement = oldAction.cloneNode(true);
+            replacement.className = 'relocated-action-btn';
+            oldAction.replaceWith(replacement);
+            for (let i = 0; i < 5; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'inserted-btn';
+                btn.textContent = 'Inserted Shift Button ' + i;
+                target.prepend(btn);
+            }
+        };
+
+        // Bulk node generator
+        window.generateBulkNodes = function(count) {
+            const container = document.getElementById('bulk-list');
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < count; i++) {
+                const item = document.createElement('div');
+                item.className = 'bulk-item';
+                item.innerHTML = '<span>Item ' + i + '</span> <button class="item-btn" id="item-btn-' + i + '">Action ' + i + '</button>';
+                fragment.appendChild(item);
+            }
+            container.appendChild(fragment);
+        };
+
+        // Dialog trigger
+        window.triggerChainedDialogs = function() {
+            alert('Dialog 1');
+            alert('Dialog 2');
+            confirm('Confirm 3');
+        };
+    </script>
+</body>
+</html>

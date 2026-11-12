@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camoufox Test Page</title>
+</head>
+<body>
+    <h1>Welcome to Camoufox Automation</h1>
+    <p>This is a testing page for our native Browser-Use adapter.</p>
+
+    <form id="test-form" onsubmit="event.preventDefault(); document.getElementById('status').innerText = 'Submitted!';">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" class="form-input text-field" placeholder="Enter username" />
+
+        <label for="country">Country:</label>
+        <select id="country" name="country" class="form-select dropdown">
+            <option value="us">United States</option>
+            <option value="fr">France</option>
+            <option value="ma">Morocco</option>
+        </select>
+
+        <label for="upload">Upload File:</label>
+        <input type="file" id="upload" name="upload" class="form-file" />
+
+        <button type="submit" id="submit-btn" class="btn primary-btn">Submit Form</button>
+    </form>
+
+    <div id="status">Ready</div>
+    <div style="height: 1500px;">Long scroll area for testing scrolling behavior</div>
+    <button id="bottom-btn" class="btn secondary-btn">Bottom Action</button>
+</body>
+</html>
