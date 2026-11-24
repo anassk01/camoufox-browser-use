@@ -198,5 +198,4 @@ MIT License. See [LICENSE](LICENSE).
 
 ### Companion Open-Source Repositories
 
-- [`anassk01/agent-writeguard`](https://github.com/anassk01/agent-writeguard) — Zero-dependency dry-run attestation, atomic `O_EXCL` locks, read-back verification, and `STOP` kill switches for AI agents
 - [`anassk01/playwright-resilient-portal-bot`](https://github.com/anassk01/playwright-resilient-portal-bot) — Resilient Playwright portal automation with retry recovery and read-back export verification
